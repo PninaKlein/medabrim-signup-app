@@ -4,10 +4,10 @@ Offline sign-up app for the Medabrim FM podcast room at Midburn. Guests leave th
 
 ## Set up the iPad (do this with internet, before the burn)
 
-1. Open the GitHub Pages link in **Safari**.
+1. Open https://pninaklein.github.io/medabrim-signup-app/ in **Safari**.
 2. Tap **Share**, then **Add to Home Screen**.
 3. Open the app from the new Home Screen icon and use only that icon from now on. The Home Screen app keeps its own data, separate from Safari.
-4. Turn on Wi-Fi off / Airplane mode and open the app once more to check it loads offline.
+4. Turn on Airplane mode and open the app once more to check that it loads offline.
 5. Optional: turn on **Guided Access** (Settings > Accessibility > Guided Access) so guests can't leave the app. Triple-click the side or Home button to start and stop it.
 
 ## Using it
