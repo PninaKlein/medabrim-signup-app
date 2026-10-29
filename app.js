@@ -5,13 +5,19 @@
 const TEXT = {
   en: {
     camp: 'Medabrim FM', onAir: 'On air', who: 'Who is recording today?',
+    qName0: 'What is your name?', qNameN: "What is the next person's name?",
+    qEmail: 'What is your email, {name}?', hintEmail: 'This is where we will send the recording.',
+    qMore: 'Is anyone else recording with you?', moreYes: '+ Yes, add a person', moreNo: "No, that's everyone",
+    qPod: 'Does your podcast have a name?', hintPod: 'Optional. You can skip this.', skip: 'Skip',
+    added: 'Signed up:', editItem: 'Fix',
+    notInstalled: 'Open in Safari. For full screen and offline use: Share, then Add to Home Screen, and open it from the icon.',
     stepDetails: 'Your details', stepCheck: 'Check', stepRec: 'Recording #',
     rotate: 'Please turn the iPad upright', namePh: 'Full name', kbNext: 'Next', space: 'space',
     handTitle: 'Over to the crew', handLede: 'Hand the iPad to a crew member to add the recording number.',
     saveRec: 'Save', skipRec: 'Add it later', recNeeded: 'Type the recording number, or tap Add it later.',
     thanksTitle: 'Thank you! Have a great recording', thanksLede: 'Your recording will reach your email after Midburn.',
     title: 'Record your podcast',
-    lede: 'Leave your details and we will email you the recording after Midburn.',
+    lede: 'A few details, and we will email you the recording after Midburn.',
     person: 'Person {n}', name: 'Name', email: 'Email', remove: 'Remove',
     addPerson: '+ Add another person',
     podcast: 'Podcast name', optional: '(optional)', podcastPh: 'For example: Dust Talks',
@@ -68,13 +74,19 @@ const TEXT = {
   },
   he: {
     camp: 'מדברים FM', onAir: 'בשידור', who: 'מי מקליטים היום?',
+    qName0: 'איך קוראים לך?', qNameN: 'ואיך קוראים לאדם הבא?',
+    qEmail: 'מה המייל שלך, {name}?', hintEmail: 'לשם נשלח את ההקלטה.',
+    qMore: 'מקליטים עוד מישהו איתך?', moreYes: '+ כן, להוסיף עוד אדם', moreNo: 'לא, זה הכול',
+    qPod: 'יש שם לפודקאסט?', hintPod: 'לא חובה. אפשר לדלג.', skip: 'דלג',
+    added: 'כבר רשומים:', editItem: 'תיקון',
+    notInstalled: 'פתוח בספארי. למסך מלא ולעבודה בלי אינטרנט: שיתוף, "הוספה למסך הבית", ולפתוח מהאייקון.',
     stepDetails: 'הפרטים שלכם', stepCheck: 'בדיקה', stepRec: 'מספר הקלטה',
     rotate: 'נא לסובב את האייפד לאורך', namePh: 'שם מלא', kbNext: 'הבא', space: 'רווח',
     handTitle: 'עכשיו תור הצוות', handLede: 'העבירו את האייפד לאחד מאנשי הצוות כדי להוסיף את מספר ההקלטה.',
     saveRec: 'שמירה', skipRec: 'להוסיף אחר כך', recNeeded: 'הקלידו את מספר ההקלטה, או הקישו "להוסיף אחר כך".',
     thanksTitle: 'תודה ובהצלחה בהקלטה!', thanksLede: 'ההקלטה תגיע למייל שלכם אחרי מידברן.',
     title: 'הקליטו פודקאסט',
-    lede: 'השאירו פרטים ואנחנו נשלח לכם את ההקלטה במייל אחרי מידברן.',
+    lede: 'כמה פרטים, ואת ההקלטה נשלח לכם במייל אחרי מידברן.',
     person: 'משתתף/ת {n}', name: 'שם', email: 'אימייל', remove: 'הסרה',
     addPerson: '+ הוספת משתתף/ת',
     podcast: 'שם הפודקאסט', optional: '(לא חובה)', podcastPh: 'לדוגמה: שיחות אבק',
@@ -214,7 +226,7 @@ const state = {
   crewUnlocked: false, pinEntry: '', pinError: false, pinNext: 'crew',
   modal: null, search: '', filter: 'all', armedDelete: null, editDraft: null,
   sendFilter: 'all', files: null, persisted: false,
-  focus: null, kbLang: 'he', shift: false, recFor: null, recDraft: ''
+  focus: null, kbLang: 'he', shift: false, recFor: null, recDraft: '', step: { kind: 'name', i: 0 }, lastTouch: Date.now()
 };
 
 const $app = document.getElementById('app');
@@ -311,8 +323,8 @@ function topBar(extra) {
   </header>`;
 }
 
-/* Guest screens: upright, one screen, no scrolling. A desert-night "studio" band on top,
-   the form in the middle and the app's own keyboard at the bottom, so the iPad keyboard never opens. */
+/* Guest screens: upright, one question per screen, like filling in one line on a paper form.
+   A desert-dusk scene fills the screen above the app's own keyboard, so the iPad keyboard never opens. */
 
 const DUNES = `<svg class="dunes" viewBox="0 0 800 160" preserveAspectRatio="none" aria-hidden="true">
   <path class="d1" d="M0 96 C120 52 220 60 330 88 C440 116 520 70 640 58 C720 50 770 66 800 74 L800 160 L0 160 Z"/>
@@ -323,30 +335,29 @@ function eq(n) {
   return `<div class="eq" aria-hidden="true">${Array.from({ length: n }, (_, i) => `<i style="--i:${i}"></i>`).join('')}</div>`;
 }
 
-function steps(current) {
-  const names = ['stepDetails', 'stepCheck', 'stepRec'];
-  return `<ol class="steps" aria-label="Steps">${names.map((k, i) => `<li class="${i === current ? 'on' : i < current ? 'past' : ''}"><span>${i + 1}</span>${esc(t(k))}</li>`).join('')}</ol>`;
-}
+const isInstalled = () => window.navigator.standalone === true || matchMedia('(display-mode: standalone)').matches;
 
-function hero(title, lede, step) {
+function topbar(withLang) {
   const due = state.meta.unbacked >= 10;
-  return `<header class="hero">
-    <div class="sun" aria-hidden="true"></div>
-    <div class="hero-top">
-      <div class="brand"><span class="lamp">${esc(t('onAir'))}</span><span class="camp">${esc(t('camp'))}</span></div>
-      <div class="row">${langSwitch()}<button class="crew-link" data-act="open-crew">${esc(t('crew'))}${due ? '<span class="dot"></span>' : ''}</button></div>
-    </div>
-    <div class="hero-mid">
-      <div class="hero-text"><h1>${esc(title)}</h1><p class="lede">${esc(lede)}</p></div>
-      ${eq(9)}
-    </div>
-    ${step == null ? '' : steps(step)}
-    ${DUNES}
-  </header>`;
+  return `<header class="topbar">
+    <div class="brand"><span class="lamp">${esc(t('onAir'))}</span><span class="camp">${esc(t('camp'))}</span></div>
+    <div class="row">${withLang ? langSwitch() : ''}<button class="crew-link" data-act="open-crew">${esc(t('crew'))}${due ? '<span class="dot"></span>' : ''}</button></div>
+  </header>
+  ${isInstalled() ? '' : `<div class="install-strip">${esc(t('notInstalled'))}</div>`}`;
 }
 
-function rotateNote() {
-  return `<div class="rotate" role="alert"><div class="rotate-icon" aria-hidden="true"></div><p>${esc(t('rotate'))}</p></div>`;
+function scene(inner, opts) {
+  opts = opts || {};
+  return `<div class="stage">
+    <section class="scene ${opts.cls || ''}">
+      <div class="sun" aria-hidden="true"></div>
+      ${topbar(opts.lang !== false)}
+      <main class="ask">${inner}</main>
+      ${DUNES}
+    </section>
+    ${opts.kb || ''}
+    <div class="rotate" role="alert"><div class="rotate-icon" aria-hidden="true"></div><p>${esc(t('rotate'))}</p></div>
+  </div>`;
 }
 
 /* ---------- In-app keyboard ---------- */
@@ -359,12 +370,6 @@ const DIGITS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
 const EMAIL_SNIPPETS = ['@gmail.com', '@walla.co.il', '@hotmail.com', '@icloud.com', '.com', '.co.il'];
 const MAX_LEN = 80;
 
-function formFields() {
-  const list = [];
-  state.draft.guests.forEach((g, i) => { list.push({ f: 'name', i }); list.push({ f: 'email', i }); });
-  list.push({ f: 'podcast', i: 0 });
-  return list;
-}
 function getVal(f, i) {
   if (f === 'name' || f === 'email') return state.draft.guests[i][f];
   if (f === 'podcast') return state.draft.podcastName;
@@ -397,14 +402,12 @@ function textField(f, i, ph) {
   </button>`;
 }
 
-function keyboard(mode) {
+function keyboard(mode, nextLabel) {
   const lang = state.kbLang;
   const up = state.shift && lang === 'en';
   const key = (k, label, cls) => `<button type="button" class="k ${cls || ''}" data-act="key" data-k="${esc(k)}">${label == null ? esc(k) : label}</button>`;
   const letters = KB[lang].map((row) => row.map((c) => key(up ? c.toUpperCase() : c)).join(''));
   const isEmail = mode === 'email';
-  const last = mode === 'rec' || (state.focus && formFields().slice(-1)[0].f === state.focus.f);
-  const nextLabel = mode === 'rec' ? t('saveRec') : last ? t('next') : t('kbNext');
   const rows = [];
   if (isEmail) rows.push(`<div class="kr snip">${EMAIL_SNIPPETS.map((s) => key(s, `<span dir="ltr">${esc(s)}</span>`, 'snip')).join('')}</div>`);
   rows.push(`<div class="kr">${DIGITS.map((d) => key(d)).join('')}</div>`);
@@ -413,7 +416,7 @@ function keyboard(mode) {
   rows.push(`<div class="kr">${lang === 'en' ? key('shift', '⇧', 'wide fn' + (state.shift ? ' lit' : '')) : ''}${letters[2]}${key('bksp', '⌫', 'wide fn')}</div>`);
   const mid = isEmail
     ? key('@', '@', 'wide') + key('.', '.') + key('-', '-') + key('_', '_')
-    : key('space', esc(t('space')), 'space') + (mode === 'rec' ? key('-', '-') : key('-', '-') + key("'", "'"));
+    : key('space', esc(t('space')), 'space') + key('-', '-') + (mode === 'rec' ? '' : key("'", "'"));
   const langKey = isEmail || mode === 'rec' ? '' : key('lang', lang === 'he' ? 'ABC' : 'אבג', 'wide fn');
   rows.push(`<div class="kr">${langKey}${mid}${key('next', esc(nextLabel), 'go')}</div>`);
   return `<div class="kb" dir="ltr">${rows.join('')}</div>`;
@@ -434,21 +437,55 @@ function typeKey(k) {
     if (k === '@' && v.includes('@')) return;
   }
   if (k === ' ' && (!v || v.endsWith(' '))) return;
-  let ch = k.length === 1 && state.shift && state.kbLang === 'en' ? k.toUpperCase() : k;
+  const ch = k.length === 1 && state.shift && state.kbLang === 'en' ? k.toUpperCase() : k;
   setVal(f, i, v + ch);
   if (state.kbLang === 'en' && f === 'name') state.shift = ch === ' ';
   else if (k.length === 1) state.shift = false;
 }
 
-function nextField() {
-  if (state.view === 'rec') { onAction('rec-save', document.body); return; }
-  const list = formFields();
-  const idx = list.findIndex((x) => x.f === state.focus.f && x.i === state.focus.i);
-  if (idx < list.length - 1) focusField(list[idx + 1].f, list[idx + 1].i);
-  else onAction('form-next', document.body);
+/* ---------- Steps: name → email → anyone else? → podcast name → check ---------- */
+
+function goStep(kind, i) {
+  state.step = { kind, i: i || 0 };
+  state.view = 'form';
+  if (kind === 'name' || kind === 'email') focusField(kind, i || 0);
+  else if (kind === 'podcast') focusField('podcast', 0);
+  else state.focus = null;
 }
 
-/* ---------- Guest views ---------- */
+function nextField() {
+  if (state.view === 'rec') { onAction('rec-save', document.body); return; }
+  onAction('step-next', document.body);
+}
+
+function stepNext() {
+  const { kind, i } = state.step;
+  const g = state.draft.guests[i];
+  if (kind === 'name') {
+    if (!g.name.trim()) { state.errors = { ['name' + i]: t('errName') }; return; }
+    goStep('email', i);
+  } else if (kind === 'email') {
+    if (!EMAIL_RE.test(cleanEmail(g.email))) { state.errors = { ['email' + i]: t('errEmail') }; return; }
+    goStep('more', i);
+  } else if (kind === 'podcast') {
+    state.view = 'confirm'; state.focus = null;
+  }
+}
+
+function stepBack() {
+  const { kind, i } = state.step;
+  state.errors = {};
+  if (kind === 'email') goStep('name', i);
+  else if (kind === 'more') goStep('email', i);
+  else if (kind === 'name' && i > 0) { state.draft.guests.splice(i, 1); goStep('more', i - 1); }
+  else if (kind === 'podcast') goStep('more', state.draft.guests.length - 1);
+}
+
+function addedChips(upTo) {
+  const done = state.draft.guests.slice(0, upTo).filter((g) => g.name.trim());
+  if (!done.length) return '';
+  return `<div class="added"><span>${esc(t('added'))}</span>${done.map((g) => `<b>✓ ${esc(g.name.trim())}</b>`).join('')}</div>`;
+}
 
 function msgLine() {
   if (state.focus && state.focus.f === 'email') {
@@ -459,87 +496,93 @@ function msgLine() {
   return errs.length ? `<span class="err">${esc(errs[0])}</span>` : '';
 }
 
-function viewForm() {
-  const d = state.draft;
-  const many = d.guests.length > 1;
-  const rows = d.guests.map((g, i) => `<div class="g-row">
-      <span class="num">${i + 1}</span>
-      ${textField('name', i, t('namePh'))}
-      ${textField('email', i, 'name@gmail.com')}
-      ${many ? `<button type="button" class="x" data-act="remove-guest" data-i="${i}" aria-label="${esc(t('remove'))}">×</button>` : ''}
-    </div>`).join('');
-  const mode = state.focus && state.focus.f === 'email' ? 'email' : 'text';
-  return `<div class="stage">
-    ${hero(t('title'), t('lede'), 0)}
-    <main class="deck">
-      <div class="cols ${many ? 'many' : ''}"><span></span><span>${esc(t('name'))}</span><span>${esc(t('email'))}</span></div>
-      <div class="g-list" id="g-list">${rows}</div>
-      <button type="button" class="add" data-act="add-guest" ${d.guests.length >= 6 ? 'disabled' : ''}>${esc(t('addPerson'))}</button>
-      <div class="pod-row"><label>🎙 ${esc(t('podcast'))} <span class="opt">${esc(t('optional'))}</span></label>${textField('podcast', 0, t('podcastPh'))}</div>
-      <div class="msg">${msgLine()}</div>
-      <div class="foot-row"><p class="consent">${esc(t('consent'))}</p><button type="button" class="btn primary go" data-act="form-next">${esc(t('next'))}</button></div>
-    </main>
-    ${keyboard(mode)}
-    ${rotateNote()}
+function navRow(nextLabel, canBack, extra) {
+  return `<div class="nav">
+    ${canBack ? `<button type="button" class="btn big outline back" data-act="step-back">${esc(t('back'))}</button>` : ''}
+    ${extra || ''}
+    <button type="button" class="btn primary big" data-act="step-next">${esc(nextLabel)}</button>
   </div>`;
+}
+
+function viewForm() {
+  const { kind, i } = state.step;
+  const g = state.draft.guests[i];
+  if (kind === 'name') {
+    return scene(`
+      ${i === 0 ? `<p class="kicker">${esc(t('lede'))}</p>` : addedChips(i)}
+      <h1>${esc(t(i === 0 ? 'qName0' : 'qNameN'))}</h1>
+      ${textField('name', i, t('namePh'))}
+      <div class="msg">${msgLine()}</div>
+      ${navRow(t('kbNext'), i > 0)}`, { kb: keyboard('text', t('kbNext')) });
+  }
+  if (kind === 'email') {
+    return scene(`
+      ${addedChips(i)}
+      <h1>${esc(t('qEmail', { name: g.name.trim().split(/\s+/)[0] }))}</h1>
+      <p class="sub">${esc(t('hintEmail'))}</p>
+      ${textField('email', i, 'name@gmail.com')}
+      <div class="msg">${msgLine()}</div>
+      ${navRow(t('kbNext'), true)}`, { kb: keyboard('email', t('kbNext')) });
+  }
+  if (kind === 'more') {
+    return scene(`
+      ${addedChips(i + 1)}
+      <h1>${esc(t('qMore'))}</h1>
+      <div class="choices">
+        <button type="button" class="choice" data-act="more-yes">${esc(t('moreYes'))}</button>
+        <button type="button" class="choice primary" data-act="more-no">${esc(t('moreNo'))}</button>
+      </div>
+      <button type="button" class="btn big outline back solo-back" data-act="step-back">${esc(t('back'))}</button>`, { cls: 'roomy' });
+  }
+  return scene(`
+    ${addedChips(state.draft.guests.length)}
+    <h1>${esc(t('qPod'))}</h1>
+    <p class="sub">${esc(t('hintPod'))}</p>
+    ${textField('podcast', 0, t('podcastPh'))}
+    <div class="msg"></div>
+    ${navRow(state.draft.podcastName.trim() ? t('next') : t('skip'), true)}`, { kb: keyboard('text', state.draft.podcastName.trim() ? t('next') : t('skip')) });
 }
 
 function viewConfirm() {
   const d = state.draft;
-  return `<div class="stage">
-    ${hero(t('confirmTitle'), t('confirmLede'), 1)}
-    <main class="deck roomy">
-      <div class="confirm-list">
-        ${d.guests.map((g) => `<div class="confirm-item"><div class="who">${esc(g.name.trim())}</div><div class="mail">${esc(cleanEmail(g.email))}</div></div>`).join('')}
-        ${d.podcastName.trim() ? `<div class="confirm-item pod"><div class="who">🎙 ${esc(t('podcast'))}</div><div class="mail">${esc(d.podcastName.trim())}</div></div>` : ''}
-      </div>
-      <div class="confirm-acts">
-        <button class="btn primary big" data-act="submit">${esc(t('submit'))}</button>
-        <button class="btn big outline" data-act="back-to-form">${esc(t('fix'))}</button>
-      </div>
-    </main>
-    ${rotateNote()}
-  </div>`;
+  return scene(`
+    <h1>${esc(t('confirmTitle'))}</h1>
+    <p class="sub">${esc(t('confirmLede'))}</p>
+    <div class="confirm-list">
+      ${d.guests.map((g, i) => `<div class="confirm-item">
+        <div class="ci-text"><div class="who">${esc(g.name.trim())}</div><div class="mail">${esc(cleanEmail(g.email))}</div></div>
+        <button type="button" class="btn sm fix" data-act="fix" data-k="name" data-i="${i}">${esc(t('editItem'))}</button>
+      </div>`).join('')}
+      ${d.podcastName.trim() ? `<div class="confirm-item pod"><div class="ci-text"><div class="who">🎙 ${esc(t('podcast'))}</div><div class="mail">${esc(d.podcastName.trim())}</div></div>
+        <button type="button" class="btn sm fix" data-act="fix" data-k="podcast" data-i="0">${esc(t('editItem'))}</button></div>` : ''}
+    </div>
+    <button class="btn primary big yes" data-act="submit">${esc(t('submit'))}</button>`, { cls: 'roomy' });
 }
 
 function viewRec() {
   const s = state.sessions.find((x) => x.id === state.recFor);
-  return `<div class="stage">
-    ${hero(t('handTitle'), t('handLede'), 2)}
-    <main class="deck">
-      <div class="rec-card">
-        <div class="who-list">${s ? s.guests.map((g) => `<span>${esc(g.name)}</span>`).join('') : ''}</div>
-        ${s && s.podcastName ? `<div class="pod-name">🎙 ${esc(s.podcastName)}</div>` : ''}
-      </div>
-      <label class="rec-label">${esc(t('recNum'))}</label>
-      ${textField('rec', 0, t('recPh'))}
-      <div class="msg">${msgLine()}</div>
-      <div class="rec-acts">
-        <button type="button" class="btn big outline" data-act="rec-skip">${esc(t('skipRec'))}</button>
-        <button type="button" class="btn primary big" data-act="rec-save">${esc(t('saveRec'))}</button>
-      </div>
-    </main>
-    ${keyboard('rec')}
-    ${rotateNote()}
-  </div>`;
+  return scene(`
+    <p class="kicker">${esc(t('handLede'))}</p>
+    <h1>${esc(t('handTitle'))}</h1>
+    <div class="who-list">${s ? s.guests.map((g) => `<span>${esc(g.name)}</span>`).join('') : ''}${s && s.podcastName ? `<em>🎙 ${esc(s.podcastName)}</em>` : ''}</div>
+    ${textField('rec', 0, t('recPh'))}
+    <div class="msg">${msgLine()}</div>
+    <div class="nav">
+      <button type="button" class="btn big outline" data-act="rec-skip">${esc(t('skipRec'))}</button>
+      <button type="button" class="btn primary big" data-act="rec-save">${esc(t('saveRec'))}</button>
+    </div>`, { kb: keyboard('rec', t('saveRec')), lang: false });
 }
 
 function viewDone() {
-  return `<div class="stage solo">
-    <header class="hero">
-      <div class="sun" aria-hidden="true"></div>
-      <div class="hero-top"><div class="brand"><span class="lamp">${esc(t('onAir'))}</span><span class="camp">${esc(t('camp'))}</span></div></div>
-      <div class="hero-mid done">
-        ${eq(13)}
-        <h1>${esc(t('thanksTitle'))}</h1>
-        <p class="lede">${esc(t('thanksLede'))}</p>
-        <button class="btn primary big" data-act="finish">${esc(t('finish'))}</button>
-      </div>
-      ${DUNES}
-    </header>
-    ${rotateNote()}
-  </div>`;
+  return scene(`
+    <div class="done">
+      ${eq(13)}
+      <h1>${esc(t('thanksTitle'))}</h1>
+      <p class="sub">${esc(t('thanksLede'))}</p>
+      <button class="btn primary big" data-act="finish">${esc(t('finish'))}</button>
+    </div>`, { cls: 'roomy solo', lang: false });
 }
+
 
 function crewList() {
   const q = state.search.trim().toLowerCase();
@@ -875,7 +918,7 @@ let doneTimer = null;
 function resetGuest() {
   clearTimeout(doneTimer);
   state.draft = blankDraft(); state.errors = {}; state.recFor = null; state.recDraft = '';
-  state.view = 'form'; state.lang = 'he'; focusField('name', 0);
+  state.lang = 'he'; goStep('name', 0);
   render(); window.scrollTo(0, 0);
 }
 
@@ -897,25 +940,19 @@ async function onAction(act, el) {
       render(); break;
     case 'focus': focusField(el.dataset.f, +el.dataset.i); render(); break;
     case 'key': typeKey(el.dataset.k); render(); break;
-    case 'add-guest':
-      if (state.draft.guests.length >= 6) break;
-      state.draft.guests.push({ name: '', email: '' });
-      focusField('name', state.draft.guests.length - 1); render();
-      { const l = document.getElementById('g-list'); if (l) l.scrollTop = l.scrollHeight; }
-      break;
-    case 'remove-guest':
-      state.draft.guests.splice(+el.dataset.i, 1); state.errors = {}; focusField('name', 0); render(); break;
+    case 'step-next': stepNext(); render(); break;
+    case 'step-back': stepBack(); render(); break;
+    case 'more-yes':
+      if (state.draft.guests.length < 8) state.draft.guests.push({ name: '', email: '' });
+      goStep('name', state.draft.guests.length - 1); render(); break;
+    case 'more-no': goStep('podcast', 0); render(); break;
+    case 'fix': state.errors = {}; goStep(el.dataset.k, +el.dataset.i); render(); break;
     case 'apply-suggest': {
       const g = state.draft.guests[+el.dataset.i];
       g.email = suggestEmail(g.email) || g.email;
       delete state.errors['email' + el.dataset.i];
       render(); break;
     }
-    case 'form-next':
-      if (validateDraft()) { state.view = 'confirm'; state.focus = null; }
-      else { const k = Object.keys(state.errors)[0]; focusField(k.replace(/\d+$/, ''), +k.match(/\d+$/)[0]); }
-      render(); break;
-    case 'back-to-form': state.view = 'form'; focusField('name', 0); render(); break;
     case 'submit': {
       const s = {
         id: uid(), code: nextCode(), createdAt: new Date().toISOString(), lang: state.lang,
@@ -1030,7 +1067,15 @@ async function requestPersist() {
 }
 
 let lastTarget = null;
-document.addEventListener('pointerdown', (e) => { lastTarget = e.target; });
+document.addEventListener('pointerdown', (e) => { lastTarget = e.target; state.lastTouch = Date.now(); });
+document.addEventListener('keydown', () => { state.lastTouch = Date.now(); });
+
+// A half-filled form left alone for 3 minutes is cleared, so the next guest starts fresh.
+setInterval(() => {
+  const started = state.draft.guests.some((g) => g.name || g.email) || state.draft.podcastName;
+  const away = Date.now() - state.lastTouch > 3 * 60 * 1000;
+  if (away && started && !state.modal && (state.view === 'form' || state.view === 'confirm')) resetGuest();
+}, 15000);
 
 $app.addEventListener('click', (e) => {
   const el = e.target.closest('[data-act]');
@@ -1109,7 +1154,7 @@ $app.addEventListener('keydown', (e) => {
 (async function start() {
   state.draft = blankDraft();
   await loadAll();
-  focusField('name', 0);
+  goStep('name', 0);
   state.lang = 'he';
   try { state.persisted = navigator.storage && navigator.storage.persisted ? await navigator.storage.persisted() : false; } catch (e) {}
   render();

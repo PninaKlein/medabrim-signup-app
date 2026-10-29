@@ -13,7 +13,7 @@ Offline sign-up app for the Medabrim FM podcast room at Midburn. Guests leave th
 ## Using it
 
 - **Use the iPad upright.** Sideways, the app asks you to turn it. The app has its own keyboard (Hebrew, English and email shortcuts), so the iPad keyboard never opens.
-- **Guests:** fill in name and email for each person (and an optional podcast name), tap Continue, and check the emails.
+- **Guests:** answer one question per screen: name, email, anyone else?, podcast name (optional), then check the emails. A half-filled form left alone for 3 minutes is cleared.
 - **Crew:** right after the guests confirm, the app asks for the recording number. Type it and tap Save, or tap "Add it later" and fill it in from the crew list. The crew list is behind **Crew** at the top, PIN `1234` by default (change it in Settings).
 - **Backups:** tap **Back up now** at least every evening. It saves a `.json` and `.csv` file to Files or AirDrops them to a phone. The app reminds you after 10 unbacked changes.
 - **After the burn:** on a laptop, open the same link, go to Crew > Settings > **Send recordings**, load the `.json` backups, add a share link for each recording, and send.
