@@ -1,5 +1,5 @@
 // Offline cache for the sign-up app. Bump VERSION whenever any file changes.
-const VERSION = 'medabrim-v1';
+const VERSION = 'medabrim-v2';
 const FILES = [
   './',
   './index.html',
@@ -8,7 +8,11 @@ const FILES = [
   './manifest.webmanifest',
   './icons/icon-180.png',
   './icons/icon-192.png',
-  './icons/icon-512.png'
+  './icons/icon-512.png',
+  './fonts/rubik-hebrew.woff2',
+  './fonts/rubik-latin.woff2',
+  './fonts/secular-hebrew.woff2',
+  './fonts/secular-latin.woff2'
 ];
 
 self.addEventListener('install', (event) => {

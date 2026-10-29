@@ -4,7 +4,7 @@
 
 const TEXT = {
   en: {
-    camp: 'Medabrim FM', onAir: 'On air',
+    camp: 'Medabrim FM', onAir: 'On air', who: 'Who is recording today?',
     title: 'Record your podcast',
     lede: 'Leave your details and we will email you the recording after Midburn.',
     person: 'Person {n}', name: 'Name', email: 'Email', remove: 'Remove',
@@ -62,7 +62,7 @@ const TEXT = {
     unnamed: 'your podcast'
   },
   he: {
-    camp: 'מדברים FM', onAir: 'בשידור',
+    camp: 'מדברים FM', onAir: 'בשידור', who: 'מי מקליטים היום?',
     title: 'הקליטו פודקאסט',
     lede: 'השאירו פרטים ואנחנו נשלח לכם את ההקלטה במייל אחרי מידברן.',
     person: 'משתתף/ת {n}', name: 'שם', email: 'אימייל', remove: 'הסרה',
@@ -191,7 +191,7 @@ async function loadAll() {
 
 function defaultMeta() {
   return {
-    pin: '1234', lang: 'en', days: [], unbacked: 0, lastBackupAt: null, lastPromptAt: 0,
+    pin: '1234', lang: 'he', days: [], unbacked: 0, lastBackupAt: null, lastPromptAt: 0,
     emailLang: 'en', subject: null, body: null
   };
 }
@@ -199,7 +199,7 @@ function defaultMeta() {
 /* ---------- State ---------- */
 
 const state = {
-  sessions: [], meta: defaultMeta(), view: 'form', lang: 'en',
+  sessions: [], meta: defaultMeta(), view: 'form', lang: 'he',
   draft: null, errors: {}, lastCode: null,
   crewUnlocked: false, pinEntry: '', pinError: false, pinNext: 'crew',
   modal: null, search: '', filter: 'all', armedDelete: null, editDraft: null,
@@ -276,14 +276,16 @@ function nextCode() {
 function render() {
   document.documentElement.lang = state.lang;
   document.documentElement.dir = state.lang === 'he' ? 'rtl' : 'ltr';
+  const guestView = ['form', 'confirm', 'done'].includes(state.view);
+  document.body.className = guestView ? 'night' : 'day';
   const views = { form: viewForm, confirm: viewConfirm, done: viewDone, crew: viewCrew, send: viewSend };
   $app.innerHTML = (views[state.view] || viewForm)() + viewModal();
 }
 
 function langSwitch() {
   return `<div class="lang" role="group" aria-label="Language">
-    <button data-act="lang" data-v="en" aria-pressed="${state.lang === 'en'}">English</button>
     <button data-act="lang" data-v="he" aria-pressed="${state.lang === 'he'}">עברית</button>
+    <button data-act="lang" data-v="en" aria-pressed="${state.lang === 'en'}">English</button>
   </div>`;
 }
 
@@ -294,6 +296,39 @@ function topBar(extra) {
   </header>`;
 }
 
+/* Guest screens: a desert-night "studio" panel beside (or above) the form. */
+
+const DUNES = `<svg class="dunes" viewBox="0 0 800 160" preserveAspectRatio="none" aria-hidden="true">
+  <path class="d1" d="M0 96 C120 52 220 60 330 88 C440 116 520 70 640 58 C720 50 770 66 800 74 L800 160 L0 160 Z"/>
+  <path class="d2" d="M0 128 C90 104 200 98 300 118 C420 142 520 104 620 100 C700 97 760 112 800 120 L800 160 L0 160 Z"/>
+</svg>`;
+
+function eq(n) {
+  return `<div class="eq" aria-hidden="true">${Array.from({ length: n }, (_, i) => `<i style="--i:${i}"></i>`).join('')}</div>`;
+}
+
+function hero(title, lede, withCrew) {
+  const due = state.meta.unbacked >= 10;
+  return `<aside class="hero">
+    <div class="sun" aria-hidden="true"></div>
+    <header class="hero-top">
+      <div class="brand"><span class="lamp">${esc(t('onAir'))}</span><span class="camp">${esc(t('camp'))}</span></div>
+      ${langSwitch()}
+    </header>
+    <div class="hero-mid">
+      ${eq(9)}
+      <h1>${esc(title)}</h1>
+      <p class="lede">${esc(lede)}</p>
+    </div>
+    ${DUNES}
+    ${withCrew ? `<button class="crew-link" data-act="open-crew">${esc(t('crew'))}${due ? '<span class="dot"></span>' : ''}</button>` : ''}
+  </aside>`;
+}
+
+function stage(heroHtml, body) {
+  return `<div class="stage">${heroHtml}<main class="deck"><div class="deck-in">${body}</div></main></div>`;
+}
+
 function viewForm() {
   const d = state.draft;
   const many = d.guests.length > 1;
@@ -301,8 +336,8 @@ function viewForm() {
     const sug = suggestEmail(g.email);
     return `<section class="card">
       <div class="card-head">
-        <span class="eyebrow">${esc(t('person', { n: i + 1 }))}</span>
-        ${many ? `<button class="btn quiet sm" data-act="remove-guest" data-i="${i}">${esc(t('remove'))}</button>` : ''}
+        <span class="eyebrow"><span class="num">${i + 1}</span>${esc(t('person', { n: '' }).trim())}</span>
+        ${many ? `<button type="button" class="btn quiet sm" data-act="remove-guest" data-i="${i}">${esc(t('remove'))}</button>` : ''}
       </div>
       <div class="field">
         <label for="name${i}">${esc(t('name'))}</label>
@@ -311,67 +346,60 @@ function viewForm() {
       </div>
       <div class="field">
         <label for="email${i}">${esc(t('email'))}</label>
-        <input class="input mono ${state.errors['email' + i] ? 'bad' : ''}" id="email${i}" data-bind="email" data-i="${i}" value="${esc(g.email)}" type="email" inputmode="email" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" dir="ltr" enterkeyhint="next">
+        <input class="input mono ${state.errors['email' + i] ? 'bad' : ''}" id="email${i}" data-bind="email" data-i="${i}" value="${esc(g.email)}" type="email" inputmode="email" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" dir="ltr" enterkeyhint="next" placeholder="name@gmail.com">
         ${state.errors['email' + i] ? `<span class="err">${esc(state.errors['email' + i])}</span>` : ''}
-        <span id="sug${i}">${sug ? `<button class="suggest" data-act="apply-suggest" data-i="${i}">${esc(t('didYouMean', { s: sug }))}</button>` : ''}</span>
+        <span id="sug${i}">${sug ? `<button type="button" class="suggest" data-act="apply-suggest" data-i="${i}">${esc(t('didYouMean', { s: sug }))}</button>` : ''}</span>
       </div>
     </section>`;
   }).join('');
   const nudge = state.meta.unbacked >= 10 ? `<div class="nudge">${esc(t('backupNudge', { n: state.meta.unbacked }))}</div>` : '';
-  return `<main class="wrap">
-    ${topBar()}
-    <div class="stack">
-      <h1>${esc(t('title'))}</h1>
-      <p class="lede">${esc(t('lede'))}</p>
-    </div>
+  return stage(hero(t('title'), t('lede'), true), `
     <form id="guest-form" class="stack" novalidate>
+      <h2>${esc(t('who'))}</h2>
       ${guests}
       <button type="button" class="btn ghost" data-act="add-guest">${esc(t('addPerson'))}</button>
       <section class="card">
         <div class="field">
-          <label for="podcast">${esc(t('podcast'))} <span class="opt">${esc(t('optional'))}</span></label>
+          <label for="podcast">🎙 ${esc(t('podcast'))} <span class="opt">${esc(t('optional'))}</span></label>
           <input class="input" id="podcast" data-bind="podcast" value="${esc(d.podcastName)}" placeholder="${esc(t('podcastPh'))}" autocomplete="off">
         </div>
       </section>
       <p class="consent">${esc(t('consent'))}</p>
       <button type="submit" class="btn primary big">${esc(t('next'))}</button>
-    </form>
-    ${nudge}
-    <footer class="foot">
-      <span></span>
-      <button class="btn quiet sm crew-link" data-act="open-crew">${esc(t('crew'))}${state.meta.unbacked >= 10 ? '<span class="dot"></span>' : ''}</button>
-    </footer>
-  </main>`;
+      ${nudge}
+    </form>`);
 }
 
 function viewConfirm() {
   const d = state.draft;
-  return `<main class="wrap">
-    ${topBar()}
+  return stage(hero(t('confirmTitle'), t('confirmLede'), false), `
     <div class="stack">
-      <h1>${esc(t('confirmTitle'))}</h1>
-      <p class="lede">${esc(t('confirmLede'))}</p>
-    </div>
-    <div class="confirm-list">
-      ${d.guests.map((g) => `<div class="confirm-item"><div class="who">${esc(g.name.trim())}</div><div class="mail">${esc(cleanEmail(g.email))}</div></div>`).join('')}
-      ${d.podcastName.trim() ? `<div class="confirm-item"><div class="who">${esc(t('podcast'))}</div><div class="mail" style="font-family:var(--font-display)">${esc(d.podcastName.trim())}</div></div>` : ''}
-    </div>
-    <button class="btn primary big" data-act="submit">${esc(t('submit'))}</button>
-    <button class="btn big" data-act="back-to-form">${esc(t('fix'))}</button>
-  </main>`;
+      <div class="confirm-list">
+        ${d.guests.map((g) => `<div class="confirm-item"><div class="who">${esc(g.name.trim())}</div><div class="mail">${esc(cleanEmail(g.email))}</div></div>`).join('')}
+        ${d.podcastName.trim() ? `<div class="confirm-item pod"><div class="who">🎙 ${esc(t('podcast'))}</div><div class="mail">${esc(d.podcastName.trim())}</div></div>` : ''}
+      </div>
+      <button class="btn primary big" data-act="submit">${esc(t('submit'))}</button>
+      <button class="btn big outline" data-act="back-to-form">${esc(t('fix'))}</button>
+    </div>`);
 }
 
 function viewDone() {
-  return `<main class="wrap">
-    ${topBar()}
-    <div class="stack done">
-      <h1>${esc(t('doneTitle'))}</h1>
-      <p class="lede">${esc(t('doneLede'))}</p>
-      <div class="code-sign" aria-label="${esc(t('codeLabel'))}"><span class="k">${esc(t('codeLabel'))}</span><span class="v">${esc(state.lastCode)}</span></div>
-      <p class="lede">${esc(t('doneNote'))}</p>
-      <button class="btn dark big" data-act="finish" style="max-width:360px">${esc(t('finish'))}</button>
-    </div>
-  </main>`;
+  return `<div class="stage solo">
+    <aside class="hero">
+      <div class="sun" aria-hidden="true"></div>
+      <header class="hero-top">
+        <div class="brand"><span class="lamp">${esc(t('onAir'))}</span><span class="camp">${esc(t('camp'))}</span></div>
+      </header>
+      <div class="hero-mid done">
+        <h1>${esc(t('doneTitle'))}</h1>
+        <p class="lede">${esc(t('doneLede'))}</p>
+        <div class="code-sign" aria-label="${esc(t('codeLabel'))}"><span class="k">${esc(t('codeLabel'))}</span><span class="v">${esc(state.lastCode)}</span>${eq(7)}</div>
+        <p class="lede">${esc(t('doneNote'))}</p>
+        <button class="btn primary big" data-act="finish">${esc(t('finish'))}</button>
+      </div>
+      ${DUNES}
+    </aside>
+  </div>`;
 }
 
 function crewList() {
@@ -393,7 +421,7 @@ function crewList() {
       </div>
       <div class="rec">
         <label class="small" for="rec-${esc(s.id)}">${esc(t('recNum'))}</label>
-        <input class="input mono" id="rec-${esc(s.id)}" data-rec="${esc(s.id)}" value="${esc(s.recordingNumber || '')}" placeholder="${esc(t('recPh'))}" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" dir="ltr" enterkeyhint="done">
+        <input class="input mono" id="rec-${esc(s.id)}" data-rec="${esc(s.id)}" value="${esc(s.recordingNumber || '')}" placeholder="${esc(t('recPh'))}" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" dir="auto" enterkeyhint="done">
         <div class="acts">
           <button class="btn sm" data-act="edit" data-id="${esc(s.id)}">${esc(t('edit'))}</button>
           <button class="btn sm danger ${armed ? 'armed' : ''}" data-act="delete" data-id="${esc(s.id)}">${esc(armed ? t('armed') : t('del'))}</button>
@@ -737,10 +765,10 @@ async function onAction(act, el) {
       state.lastCode = s.code; state.view = 'done'; state.draft = blankDraft(); state.errors = {};
       render(); window.scrollTo(0, 0);
       clearTimeout(doneTimer);
-      doneTimer = setTimeout(() => { if (state.view === 'done') { state.view = 'form'; render(); } }, 45000);
+      doneTimer = setTimeout(() => { if (state.view === 'done') { state.view = 'form'; state.lang = 'he'; render(); } }, 45000);
       break;
     }
-    case 'finish': clearTimeout(doneTimer); state.view = 'form'; render(); window.scrollTo(0, 0); break;
+    case 'finish': clearTimeout(doneTimer); state.view = 'form'; state.lang = 'he'; render(); window.scrollTo(0, 0); break;
     case 'open-crew':
       if (state.crewUnlocked) { enterCrew(); break; }
       state.modal = 'pin'; state.pinEntry = ''; state.pinError = false; render(); break;
@@ -758,7 +786,7 @@ async function onAction(act, el) {
     }
     case 'close-modal': state.modal = null; state.editDraft = null; render(); break;
     case 'close-modal-bg': if (el === lastTarget) { state.modal = null; render(); } break;
-    case 'exit-crew': state.crewUnlocked = false; state.view = 'form'; state.armedDelete = null; render(); window.scrollTo(0, 0); break;
+    case 'exit-crew': state.crewUnlocked = false; state.view = 'form'; state.lang = 'he'; state.armedDelete = null; render(); window.scrollTo(0, 0); break;
     case 'backup': await doBackup(); break;
     case 'filter': state.filter = el.dataset.v; render(); break;
     case 'edit':
@@ -902,10 +930,16 @@ $app.addEventListener('keydown', (e) => {
 (async function start() {
   state.draft = blankDraft();
   await loadAll();
-  state.lang = state.meta.lang || 'en';
+  state.lang = 'he';
   try { state.persisted = navigator.storage && navigator.storage.persisted ? await navigator.storage.persisted() : false; } catch (e) {}
   render();
   if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    // A new version takes over in the background; reload only when no guest is mid-form.
+    let reloaded = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      const idle = state.view === 'form' && !state.draft.guests.some((g) => g.name || g.email) && !state.modal;
+      if (!reloaded && idle) { reloaded = true; location.reload(); }
+    });
     navigator.serviceWorker.register('sw.js').catch(() => {});
   }
 })();
