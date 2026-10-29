@@ -5,6 +5,12 @@
 const TEXT = {
   en: {
     camp: 'Medabrim FM', onAir: 'On air', who: 'Who is recording today?',
+    recordings: 'Recordings so far', signedUp: '{n} signed up', lastBackupL: 'Last backup',
+    unbackedN: '{n} changes not backed up yet', allBacked: 'Everything is backed up',
+    missingBanner: '{n} entries have no recording number', missingBanner1: '1 entry has no recording number', showMissing: 'Show them', showAll: 'Show all',
+    noneMissing: 'Every entry has a recording number.', allEntries: 'All entries', tapToEdit: 'Tap an entry to add the number or fix details',
+    addNum: '+ Add #', editTitle: 'Edit entry', deleteEntry: 'Delete this entry', more: 'More',
+    justNow: 'just now', minsAgo: '{n} min ago', hoursAgo: '{n} hours ago',
     qName0: 'What is your name?', qNameN: "What is the next person's name?",
     qEmail: 'What is your email, {name}?', hintEmail: 'This is where we will send the recording.',
     qMore: 'Is anyone else recording with you?', moreYes: '+ Yes, add a person', moreNo: "No, that's everyone",
@@ -39,7 +45,7 @@ const TEXT = {
     backupTitle: 'Time to back up',
     backupBody: '{n} new entries since the last backup. Save a copy to Files, or AirDrop it to a phone.',
     later: 'Later',
-    search: 'Search names, emails or codes', all: 'All', missingOnly: 'Missing #',
+    search: 'Search names, emails or codes', all: 'All', missingOnly: 'Missing a recording number',
     recNum: 'Recording #', recPh: 'For example: 042', saved: 'Saved',
     edit: 'Edit', del: 'Delete', armed: 'Tap again to delete', deleted: 'Entry deleted',
     save: 'Save', notes: 'Crew notes',
@@ -60,7 +66,7 @@ const TEXT = {
     step3: '3. Add share links', step3Body: 'Paste one line per recording: recording number, a comma, then the link. You can also paste a link into each row below.',
     applyLinks: 'Add links', linksAdded: 'Links added: {n}',
     step4: '4. The email', subject: 'Subject', body: 'Message', emailLang: 'Language',
-    templateHelp: 'These words are filled in for each email: {names}, {podcast}, {link}, {code}',
+    templateHelp: 'These words are filled in for each email: {names}, {podcast}, {link}',
     exportCsv: 'Export for mail merge (CSV)',
     readyN: 'Ready', needsLink: 'Needs link', noRec: 'No recording #', sentS: 'Sent', noFile: 'No file found', fileOk: 'File found',
     link: 'Share link', linkPh: 'https://drive.google.com/…',
@@ -74,6 +80,12 @@ const TEXT = {
   },
   he: {
     camp: 'מדברים FM', onAir: 'בשידור', who: 'מי מקליטים היום?',
+    recordings: 'הקלטות עד עכשיו', signedUp: '{n} נרשמו', lastBackupL: 'גיבוי אחרון',
+    unbackedN: '{n} שינויים עוד לא מגובים', allBacked: 'הכול מגובה',
+    missingBanner: 'ל־{n} רשומות חסר מספר הקלטה', missingBanner1: 'לרשומה אחת חסר מספר הקלטה', showMissing: 'להציג אותן', showAll: 'להציג הכול',
+    noneMissing: 'לכל הרשומות יש מספר הקלטה.', allEntries: 'כל הרשומות', tapToEdit: 'הקישו על רשומה כדי להוסיף מספר או לתקן פרטים',
+    addNum: '+ מספר', editTitle: 'עריכת רשומה', deleteEntry: 'מחיקת הרשומה', more: 'עוד',
+    justNow: 'הרגע', minsAgo: 'לפני {n} דק׳', hoursAgo: 'לפני {n} שעות',
     qName0: 'איך קוראים לך?', qNameN: 'ואיך קוראים לאדם הבא?',
     qEmail: 'מה המייל שלך, {name}?', hintEmail: 'לשם נשלח את ההקלטה.',
     qMore: 'מקליטים עוד מישהו איתך?', moreYes: '+ כן, להוסיף עוד אדם', moreNo: 'לא, זה הכול',
@@ -108,7 +120,7 @@ const TEXT = {
     backupTitle: 'הגיע הזמן לגבות',
     backupBody: '{n} רשומות חדשות מאז הגיבוי האחרון. שמרו עותק בקבצים או שלחו ב־AirDrop לטלפון.',
     later: 'אחר כך',
-    search: 'חיפוש שם, אימייל או קוד', all: 'הכול', missingOnly: 'חסר מספר',
+    search: 'חיפוש שם, אימייל או קוד', all: 'הכול', missingOnly: 'חסר מספר הקלטה',
     recNum: 'מספר הקלטה', recPh: 'לדוגמה: 042', saved: 'נשמר',
     edit: 'עריכה', del: 'מחיקה', armed: 'הקישו שוב למחיקה', deleted: 'הרשומה נמחקה',
     save: 'שמירה', notes: 'הערות צוות',
@@ -129,7 +141,7 @@ const TEXT = {
     step3: '3. הוספת קישורי שיתוף', step3Body: 'הדביקו שורה לכל הקלטה: מספר הקלטה, פסיק, ואז הקישור. אפשר גם להדביק קישור בכל שורה למטה.',
     applyLinks: 'הוספת קישורים', linksAdded: 'קישורים שנוספו: {n}',
     step4: '4. המייל', subject: 'נושא', body: 'הודעה', emailLang: 'שפה',
-    templateHelp: 'המילים האלה מתמלאות בכל מייל: {names}, {podcast}, {link}, {code}',
+    templateHelp: 'המילים האלה מתמלאות בכל מייל: {names}, {podcast}, {link}',
     exportCsv: 'ייצוא למיזוג דואר (CSV)',
     readyN: 'מוכן', needsLink: 'חסר קישור', noRec: 'חסר מספר', sentS: 'נשלח', noFile: 'לא נמצא קובץ', fileOk: 'נמצא קובץ',
     link: 'קישור שיתוף', linkPh: 'https://drive.google.com/…',
@@ -283,16 +295,6 @@ function validateDraft() {
   return Object.keys(errors).length === 0;
 }
 
-/* ---------- Session codes: day letter + running number (A1, A2 … B1) ---------- */
-
-function nextCode() {
-  const today = new Date().toLocaleDateString('en-CA');
-  if (!state.meta.days.includes(today)) state.meta.days.push(today);
-  const dayIdx = state.meta.days.indexOf(today);
-  const letter = String.fromCharCode(65 + (dayIdx % 26));
-  const used = state.sessions.filter((s) => s.code && s.code.startsWith(letter)).map((s) => parseInt(s.code.slice(1), 10) || 0);
-  return letter + (Math.max(0, ...used) + 1);
-}
 
 /* ---------- Rendering ---------- */
 
@@ -301,7 +303,7 @@ function render() {
   document.documentElement.dir = state.lang === 'he' ? 'rtl' : 'ltr';
   const guestView = ['form', 'confirm', 'rec', 'done'].includes(state.view);
   document.body.className = guestView ? 'night' : 'day';
-  const views = { form: viewForm, confirm: viewConfirm, rec: viewRec, done: viewDone, crew: viewCrew, send: viewSend };
+  const views = { form: viewForm, confirm: viewConfirm, rec: viewRec, done: viewDone, crew: viewCrew, edit: viewEdit, send: viewSend };
   const list = document.getElementById('g-list');
   const keep = list ? list.scrollTop : 0;
   $app.innerHTML = (views[state.view] || viewForm)() + viewModal();
@@ -371,13 +373,23 @@ const EMAIL_SNIPPETS = ['@gmail.com', '@walla.co.il', '@hotmail.com', '@icloud.c
 const MAX_LEN = 80;
 
 function getVal(f, i) {
+  if (state.view === 'edit') {
+    const d = state.editDraft;
+    if (f === 'name' || f === 'email') return d.guests[i][f];
+    return (f === 'podcast' ? d.podcastName : d.recordingNumber) || '';
+  }
   if (f === 'name' || f === 'email') return state.draft.guests[i][f];
   if (f === 'podcast') return state.draft.podcastName;
   return state.recDraft;
 }
 function setVal(f, i, v) {
   v = v.slice(0, MAX_LEN);
-  if (f === 'name' || f === 'email') state.draft.guests[i][f] = v;
+  if (state.view === 'edit') {
+    const d = state.editDraft;
+    if (f === 'name' || f === 'email') d.guests[i][f] = v;
+    else if (f === 'podcast') d.podcastName = v;
+    else d.recordingNumber = v;
+  } else if (f === 'name' || f === 'email') state.draft.guests[i][f] = v;
   else if (f === 'podcast') state.draft.podcastName = v;
   else state.recDraft = v;
   delete state.errors[f + i];
@@ -395,7 +407,7 @@ function textField(f, i, ph) {
   const on = state.focus && state.focus.f === f && state.focus.i === i;
   const bad = !!state.errors[f + i];
   const ok = f === 'email' && EMAIL_RE.test(cleanEmail(v));
-  const dir = f === 'email' || f === 'rec' ? 'ltr' : v ? (hasHebrew(v) ? 'rtl' : 'ltr') : (state.lang === 'he' ? 'rtl' : 'ltr');
+  const dir = f === 'email' || (f === 'rec' && v) ? 'ltr' : v ? (hasHebrew(v) ? 'rtl' : 'ltr') : (state.lang === 'he' ? 'rtl' : 'ltr');
   const size = v.length > 30 ? 'xs' : v.length > 22 ? 'sm' : '';
   return `<button type="button" class="tf ${on ? 'on' : ''} ${bad ? 'bad' : ''} ${ok ? 'ok' : ''} ${size} ${f === 'rec' ? 'rec' : ''}" data-act="focus" data-f="${f}" data-i="${i}" dir="${dir}" aria-label="${esc(ph)}">
     <span class="tv">${esc(v)}</span>${on ? '<span class="caret"></span>' : ''}${v ? '' : `<span class="ph">${esc(ph)}</span>`}
@@ -455,6 +467,13 @@ function goStep(kind, i) {
 
 function nextField() {
   if (state.view === 'rec') { onAction('rec-save', document.body); return; }
+  if (state.view === 'edit') {
+    const list = editFields();
+    const idx = list.findIndex((x) => x.f === state.focus.f && x.i === state.focus.i);
+    if (idx < list.length - 1) focusField(list[idx + 1].f, list[idx + 1].i);
+    else onAction('ed-save', document.body);
+    return;
+  }
   onAction('step-next', document.body);
 }
 
@@ -584,69 +603,82 @@ function viewDone() {
 }
 
 
+/* ---------- Crew: tally, backup, missing numbers, edit ---------- */
+
+const hasRec = (s) => !!String(s.recordingNumber || '').trim();
+
+function relTime(iso) {
+  if (!iso) return t('never');
+  const mins = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+  if (mins < 1) return t('justNow');
+  if (mins < 60) return t('minsAgo', { n: mins });
+  if (mins < 24 * 60) return t('hoursAgo', { n: Math.round(mins / 60) });
+  return fmtTime(iso, true);
+}
+
+function backupDue() {
+  const m = state.meta;
+  if (!m.unbacked) return false;
+  if (m.unbacked >= 10 || !m.lastBackupAt) return true;
+  return Date.now() - new Date(m.lastBackupAt).getTime() > 6 * 60 * 60 * 1000;
+}
+
 function crewList() {
-  const q = state.search.trim().toLowerCase();
   let items = live().slice().sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
-  if (state.filter === 'missing') items = items.filter((s) => !String(s.recordingNumber || '').trim());
-  if (q) items = items.filter((s) => [s.code, s.podcastName, s.recordingNumber, s.notes, ...s.guests.flatMap((g) => [g.name, g.email])].join(' ').toLowerCase().includes(q));
+  if (state.filter === 'missing') items = items.filter((s) => !hasRec(s));
   if (!live().length) return `<div class="empty">${esc(t('noEntries'))}</div>`;
-  if (!items.length) return `<div class="empty">${esc(t('noMatch'))}</div>`;
+  if (!items.length) return `<div class="empty">${esc(t('noneMissing'))}</div>`;
   return items.map((s) => {
-    const missing = !String(s.recordingNumber || '').trim();
-    const armed = state.armedDelete === s.id;
-    return `<article class="entry ${missing ? 'missing' : ''}">
-      <div><div class="code">${esc(s.code)}</div><div class="time">${esc(fmtTime(s.createdAt, true))}</div></div>
-      <div class="people">
-        ${s.guests.map((g) => `<div class="person">${esc(g.name)} <span class="e">${esc(g.email)}</span></div>`).join('')}
-        ${s.podcastName ? `<div class="pod">🎙 ${esc(s.podcastName)}</div>` : ''}
-        ${s.notes ? `<div class="note">${esc(s.notes)}</div>` : ''}
-      </div>
-      <div class="rec">
-        <label class="small" for="rec-${esc(s.id)}">${esc(t('recNum'))}</label>
-        <input class="input mono" id="rec-${esc(s.id)}" data-rec="${esc(s.id)}" value="${esc(s.recordingNumber || '')}" placeholder="${esc(t('recPh'))}" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" dir="auto" enterkeyhint="done">
-        <div class="acts">
-          <button class="btn sm" data-act="edit" data-id="${esc(s.id)}">${esc(t('edit'))}</button>
-          <button class="btn sm danger ${armed ? 'armed' : ''}" data-act="delete" data-id="${esc(s.id)}">${esc(armed ? t('armed') : t('del'))}</button>
-        </div>
-      </div>
-    </article>`;
+    const rec = hasRec(s);
+    return `<button type="button" class="entry ${rec ? '' : 'missing'}" data-act="edit" data-id="${esc(s.id)}">
+      <span class="recno ${rec ? '' : 'none'}">${rec ? `<small>#</small>${esc(s.recordingNumber)}` : esc(t('addNum'))}</span>
+      <span class="people">
+        <span class="names">${s.guests.map((g) => esc(g.name)).join(' · ')}</span>
+        <span class="mails">${s.guests.map((g) => esc(g.email)).join(', ')}</span>
+        ${s.podcastName ? `<span class="pod">🎙 ${esc(s.podcastName)}</span>` : ''}
+      </span>
+      <span class="when">${esc(fmtTime(s.createdAt, true))}</span>
+    </button>`;
   }).join('');
 }
 
 function viewCrew() {
   const all = live();
-  const missing = all.filter((s) => !String(s.recordingNumber || '').trim()).length;
-  const due = state.meta.unbacked >= 10;
-  const standalone = window.navigator.standalone === true || matchMedia('(display-mode: standalone)').matches;
-  return `<main class="wrap wide">
-    ${topBar(`<button class="btn sm" data-act="exit-crew">${esc(t('exit'))}</button>`)}
-    <h1>${esc(t('crewTitle'))}</h1>
-    ${standalone ? '' : `<div class="hint"><strong>${esc(t('installTitle'))}</strong>${esc(t('installBody'))}</div>`}
-    <div class="tiles">
-      <div class="tile"><span class="n">${all.length}</span><span class="l">${esc(t('entries'))}</span></div>
-      <div class="tile ${missing ? 'warn' : ''}"><span class="n">${missing}</span><span class="l">${esc(t('missingNum'))}</span></div>
-      <div class="tile ${due ? 'warn' : ''}"><span class="n">${state.meta.unbacked}</span><span class="l">${esc(t('sinceBackup'))}</span></div>
-    </div>
-    <div class="backup ${due ? 'due' : ''}">
-      <div><strong>${esc(t('lastBackup', { t: state.meta.lastBackupAt ? fmtTime(state.meta.lastBackupAt, true) : t('never') }))}</strong>
-      <div class="small">${esc(state.persisted ? t('storageOk') : t('storageWarn'))}</div></div>
-      <button class="btn ${due ? 'primary' : 'dark'}" data-act="backup">${esc(t('backupNow'))}</button>
-    </div>
-    <div class="row split">
-      <input class="input" id="crew-search" data-bind="search" value="${esc(state.search)}" placeholder="${esc(t('search'))}" style="flex:1 1 260px" autocomplete="off">
-      <div class="chips">
-        <button class="chip" data-act="filter" data-v="all" aria-pressed="${state.filter === 'all'}">${esc(t('all'))}</button>
-        <button class="chip" data-act="filter" data-v="missing" aria-pressed="${state.filter === 'missing'}">${esc(t('missingOnly'))} (${missing})</button>
+  const recorded = all.filter(hasRec).length;
+  const missing = all.length - recorded;
+  const due = backupDue();
+  if (!missing) state.filter = 'all';
+  return `<main class="crew">
+    <header class="crew-top">
+      <button class="btn dark" data-act="exit-crew">${esc(t('exit'))}</button>
+      <h1>${esc(t('crewTitle'))}</h1>
+      ${langSwitch()}
+    </header>
+    ${isInstalled() ? '' : `<div class="install-strip">${esc(t('notInstalled'))}</div>`}
+    <section class="summary">
+      <div class="tally">
+        ${eq(7)}
+        <div class="big">${recorded}</div>
+        <div class="lbl">${esc(t('recordings'))}</div>
+        <div class="sub2">${esc(t('signedUp', { n: all.length }))}</div>
       </div>
+      <div class="backupcard ${due ? 'due' : ''}">
+        <div class="lbl">${esc(t('lastBackupL'))}</div>
+        <div class="big2">${esc(relTime(state.meta.lastBackupAt))}</div>
+        <div class="sub2">${esc(state.meta.unbacked ? t('unbackedN', { n: state.meta.unbacked }) : t('allBacked'))}</div>
+        <button class="btn ${due ? 'primary' : 'dark'} bk" data-act="backup">${esc(t('backupNow'))}</button>
+      </div>
+    </section>
+    ${missing ? `<button type="button" class="missing-bar" data-act="filter" data-v="${state.filter === 'missing' ? 'all' : 'missing'}">
+      <span>⚠ ${esc(missing === 1 ? t('missingBanner1') : t('missingBanner', { n: missing }))}</span><b>${esc(state.filter === 'missing' ? t('showAll') : t('showMissing'))}</b></button>` : ''}
+    <div class="list-head">
+      <h2>${esc(state.filter === 'missing' ? t('missingOnly') : t('allEntries'))}</h2>
+      <span class="small">${esc(t('tapToEdit'))}</span>
     </div>
     <div class="list" id="crew-list">${crewList()}</div>
     <details class="panel">
-      <summary>${esc(t('settings'))}</summary>
+      <summary>${esc(t('more'))}</summary>
       <div class="stack">
-        <div class="field">
-          <label for="new-pin">${esc(t('newPin'))}</label>
-          <div class="row"><input class="input mono" id="new-pin" inputmode="numeric" maxlength="4" style="max-width:160px" autocomplete="off"><button class="btn" data-act="set-pin">${esc(t('setPin'))}</button></div>
-        </div>
         <div class="field">
           <label for="restore-file">${esc(t('restore'))}</label>
           <input id="restore-file" type="file" accept=".json,application/json" data-import="1">
@@ -655,6 +687,43 @@ function viewCrew() {
       </div>
     </details>
   </main>`;
+}
+
+function editFields() {
+  const list = [{ f: 'rec', i: 0 }];
+  state.editDraft.guests.forEach((g, i) => { list.push({ f: 'name', i }); list.push({ f: 'email', i }); });
+  list.push({ f: 'podcast', i: 0 });
+  return list;
+}
+
+function viewEdit() {
+  const d = state.editDraft;
+  const fo = state.focus || { f: 'rec' };
+  const mode = fo.f === 'email' ? 'email' : fo.f === 'rec' ? 'rec' : 'text';
+  const list = editFields();
+  const last = list[list.length - 1];
+  const isLast = fo.f === last.f && fo.i === last.i;
+  const armed = state.armedDelete === d.id;
+  return `<div class="edit-stage">
+    <header class="edit-top">
+      <button class="btn" data-act="ed-cancel">${esc(t('cancel'))}</button>
+      <h2>${esc(t('editTitle'))}</h2>
+      <button class="btn primary" data-act="ed-save">${esc(t('save'))}</button>
+    </header>
+    <div class="edit-body">
+      <div class="ef rec-ef"><label>${esc(t('recNum'))}</label>${textField('rec', 0, t('recPh'))}</div>
+      ${d.guests.map((g, i) => `<div class="ef-person">
+        <div class="ef"><label>${esc(t('name'))} ${d.guests.length > 1 ? i + 1 : ''}</label>${textField('name', i, t('namePh'))}</div>
+        <div class="ef"><label>${esc(t('email'))}</label>${textField('email', i, 'name@gmail.com')}</div>
+        ${d.guests.length > 1 ? `<button type="button" class="x" data-act="ed-remove" data-i="${i}" aria-label="${esc(t('remove'))}">×</button>` : ''}
+      </div>`).join('')}
+      <button type="button" class="btn ghost sm" data-act="ed-add">${esc(t('addPerson'))}</button>
+      <div class="ef"><label>🎙 ${esc(t('podcast'))}</label>${textField('podcast', 0, t('podcastPh'))}</div>
+      <div class="msg">${msgLine()}</div>
+      <button type="button" class="btn danger ${armed ? 'armed' : ''} del" data-act="delete" data-id="${esc(d.id)}">${esc(armed ? t('armed') : t('deleteEntry'))}</button>
+    </div>
+    ${keyboard(mode, isLast ? t('save') : t('kbNext'))}
+  </div>`;
 }
 
 /* ---------- Send mode ---------- */
@@ -684,8 +753,7 @@ function fillTemplate(tpl, s) {
   const names = s.guests.map((g) => g.name.trim().split(/\s+/)[0]).join(state.meta.emailLang === 'he' ? ' ו' : ' & ');
   return tpl.split('{names}').join(names)
     .split('{podcast}').join(s.podcastName || TEXT[state.meta.emailLang].unnamed)
-    .split('{link}').join(s.link || '')
-    .split('{code}').join(s.code || '');
+    .split('{link}').join(s.link || '');
 }
 const tplSubject = () => state.meta.subject != null ? state.meta.subject : TEXT[state.meta.emailLang].subjectDefault;
 const tplBody = () => state.meta.body != null ? state.meta.body : TEXT[state.meta.emailLang].bodyDefault;
@@ -705,11 +773,10 @@ function sendList() {
     const fm = fileMatch(s.recordingNumber);
     return `<article class="send-row ${st === 'sent' ? 'is-sent' : ''}">
       <div class="top">
-        <span class="code">${esc(s.code)}</span>
+        <span class="code">${s.recordingNumber ? '#' + esc(s.recordingNumber) : '—'}</span>
         <strong>${esc(s.guests.map((g) => g.name).join(', '))}</strong>
         ${s.podcastName ? `<span class="small">🎙 ${esc(s.podcastName)}</span>` : ''}
         <span class="pill ${pills[st][0]}">${esc(t(pills[st][1]))}</span>
-        ${s.recordingNumber ? `<span class="pill mute">${esc(t('recNum'))} ${esc(s.recordingNumber)}</span>` : ''}
         ${fm === null || !s.recordingNumber ? '' : `<span class="pill ${fm ? 'ok' : 'red'}">${esc(t(fm ? 'fileOk' : 'noFile'))}</span>`}
       </div>
       <div class="mails">${esc(s.guests.map((g) => g.email).join(', '))}</div>
@@ -780,17 +847,6 @@ function viewSend() {
 function viewModal() {
   const m = state.modal;
   if (!m) return '';
-  if (m === 'pin') {
-    const dots = [0, 1, 2, 3].map((i) => `<span class="${i < state.pinEntry.length ? 'on' : ''}"></span>`).join('');
-    const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'C', '0', '⌫'];
-    return `<div class="scrim" data-act="close-modal-bg"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="pin-title">
-      <h2 id="pin-title" style="text-align:center">${esc(t('pinTitle'))}</h2>
-      <div class="pin-dots">${dots}</div>
-      ${state.pinError ? `<div class="err" style="text-align:center">${esc(t('pinWrong'))}</div>` : ''}
-      <div class="pad">${keys.map((k) => `<button data-act="pin-key" data-v="${k}" aria-label="${k === 'C' ? esc(t('clear')) : k === '⌫' ? 'Delete' : k}">${k}</button>`).join('')}</div>
-      <button class="btn" data-act="close-modal">${esc(t('cancel'))}</button>
-    </div></div>`;
-  }
   if (m === 'backup') {
     return `<div class="scrim"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="bk-title">
       <h2 id="bk-title">${esc(t('backupTitle'))}</h2>
@@ -798,34 +854,16 @@ function viewModal() {
       <div class="row end"><button class="btn" data-act="close-modal">${esc(t('later'))}</button><button class="btn primary" data-act="backup">${esc(t('backupNow'))}</button></div>
     </div></div>`;
   }
-  if (m === 'edit') {
-    const d = state.editDraft;
-    return `<div class="scrim"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="ed-title">
-      <h2 id="ed-title">${esc(t('edit'))} ${esc(d.code)}</h2>
-      ${d.guests.map((g, i) => `<div class="stack">
-        <span class="eyebrow">${esc(t('person', { n: i + 1 }))}</span>
-        <input class="input" id="ed-name${i}" data-ebind="name" data-i="${i}" value="${esc(g.name)}" aria-label="${esc(t('name'))}">
-        <input class="input mono" id="ed-email${i}" data-ebind="email" data-i="${i}" value="${esc(g.email)}" dir="ltr" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="${esc(t('email'))}">
-        ${d.guests.length > 1 ? `<button class="btn quiet sm" data-act="ed-remove" data-i="${i}" style="align-self:flex-start">${esc(t('remove'))}</button>` : ''}
-      </div>`).join('')}
-      <button class="btn ghost sm" data-act="ed-add">${esc(t('addPerson'))}</button>
-      <div class="field"><label for="ed-pod">${esc(t('podcast'))}</label><input class="input" id="ed-pod" data-ebind="podcastName" value="${esc(d.podcastName || '')}"></div>
-      <div class="field"><label for="ed-rec">${esc(t('recNum'))}</label><input class="input mono" id="ed-rec" data-ebind="recordingNumber" value="${esc(d.recordingNumber || '')}" dir="ltr"></div>
-      <div class="field"><label for="ed-notes">${esc(t('notes'))}</label><textarea class="input" id="ed-notes" data-ebind="notes">${esc(d.notes || '')}</textarea></div>
-      <div id="ed-err" class="err"></div>
-      <div class="row end"><button class="btn" data-act="close-modal">${esc(t('cancel'))}</button><button class="btn primary" data-act="ed-save">${esc(t('save'))}</button></div>
-    </div></div>`;
-  }
   return '';
 }
 
 /* ---------- Backup & import ---------- */
 
-const CSV_HEAD = ['code', 'created', 'recording_number', 'podcast_name', 'names', 'emails', 'notes', 'link', 'sent_at'];
+const CSV_HEAD = ['created', 'recording_number', 'podcast_name', 'names', 'emails', 'notes', 'link', 'sent_at'];
 function csvCell(v) { const s = String(v == null ? '' : v); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }
 function toCsv(rows) {
   return '﻿' + [CSV_HEAD.join(',')].concat(rows.map((s) => [
-    s.code, s.createdAt, s.recordingNumber || '', s.podcastName || '',
+    s.createdAt, s.recordingNumber || '', s.podcastName || '',
     s.guests.map((g) => g.name).join('; '), s.guests.map((g) => g.email).join('; '),
     s.notes || '', s.link || '', s.sentAt || ''
   ].map(csvCell).join(','))).join('\n');
@@ -849,7 +887,8 @@ async function shareOrDownload(files) {
 }
 
 async function doBackup() {
-  const payload = { app: 'medabrim-fm-signup', version: 1, exportedAt: new Date().toISOString(), sessions: state.sessions };
+  const sessions = state.sessions.map(({ code, ...rest }) => rest);
+  const payload = { app: 'medabrim-fm-signup', version: 1, exportedAt: new Date().toISOString(), sessions };
   const name = 'medabrim-fm-backup_' + stamp();
   const files = [
     new File([JSON.stringify(payload, null, 1)], name + '.json', { type: 'application/json' }),
@@ -955,7 +994,7 @@ async function onAction(act, el) {
     }
     case 'submit': {
       const s = {
-        id: uid(), code: nextCode(), createdAt: new Date().toISOString(), lang: state.lang,
+        id: uid(), createdAt: new Date().toISOString(), lang: state.lang,
         guests: state.draft.guests.map((g) => ({ name: g.name.trim(), email: cleanEmail(g.email) })),
         podcastName: state.draft.podcastName.trim(), recordingNumber: '', notes: '', deleted: false
       };
@@ -975,49 +1014,38 @@ async function onAction(act, el) {
     }
     case 'rec-skip': showThanks(); break;
     case 'finish': resetGuest(); break;
-    case 'open-crew':
-      if (state.crewUnlocked) { enterCrew(); break; }
-      state.modal = 'pin'; state.pinEntry = ''; state.pinError = false; render(); break;
-    case 'pin-key': {
-      const v = el.dataset.v;
-      state.pinError = false;
-      if (v === 'C') state.pinEntry = '';
-      else if (v === '⌫') state.pinEntry = state.pinEntry.slice(0, -1);
-      else if (state.pinEntry.length < 4) state.pinEntry += v;
-      if (state.pinEntry.length === 4) {
-        if (state.pinEntry === state.meta.pin) { state.crewUnlocked = true; state.modal = null; enterCrew(); return; }
-        state.pinError = true; state.pinEntry = '';
-      }
-      render(); break;
-    }
+    case 'open-crew': enterCrew(); break;
     case 'close-modal': state.modal = null; state.editDraft = null; render(); break;
     case 'close-modal-bg': if (el === lastTarget) { state.modal = null; render(); } break;
-    case 'exit-crew': state.crewUnlocked = false; state.armedDelete = null; resetGuest(); break;
+    case 'exit-crew': state.armedDelete = null; resetGuest(); break;
     case 'backup': await doBackup(); break;
     case 'filter': state.filter = el.dataset.v; render(); break;
     case 'edit':
-      state.editDraft = JSON.parse(JSON.stringify(sess)); state.modal = 'edit'; render(); break;
-    case 'ed-add': state.editDraft.guests.push({ name: '', email: '' }); render(); break;
-    case 'ed-remove': state.editDraft.guests.splice(+el.dataset.i, 1); render(); break;
+      state.editDraft = JSON.parse(JSON.stringify(sess)); state.armedDelete = null; state.errors = {};
+      state.view = 'edit'; focusField('rec', 0); render(); window.scrollTo(0, 0); break;
+    case 'ed-cancel': state.editDraft = null; state.focus = null; state.errors = {}; state.view = 'crew'; render(); break;
+    case 'ed-add': state.editDraft.guests.push({ name: '', email: '' }); focusField('name', state.editDraft.guests.length - 1); render(); break;
+    case 'ed-remove': state.editDraft.guests.splice(+el.dataset.i, 1); focusField('rec', 0); render(); break;
     case 'ed-save': {
       const d = state.editDraft;
-      d.guests = d.guests.map((g) => ({ name: g.name.trim(), email: cleanEmail(g.email) }));
-      const bad = d.guests.find((g) => !g.name || !EMAIL_RE.test(g.email));
-      if (bad) { document.getElementById('ed-err').textContent = !bad.name ? t('errName') : t('errEmail') + ' ' + bad.email; return; }
+      d.guests = d.guests.map((g) => ({ name: g.name.trim(), email: cleanEmail(g.email) })).filter((g) => g.name || g.email);
+      if (!d.guests.length) d.guests = [{ name: '', email: '' }];
+      const bi = d.guests.findIndex((g) => !g.name || !EMAIL_RE.test(g.email));
+      if (bi >= 0) {
+        const f = d.guests[bi].name ? 'email' : 'name';
+        state.errors = { [f + bi]: t(f === 'name' ? 'errName' : 'errEmail') }; focusField(f, bi); render(); break;
+      }
       d.podcastName = (d.podcastName || '').trim(); d.recordingNumber = (d.recordingNumber || '').trim();
       await saveSession(d); state.meta.unbacked += 1; await saveMeta();
-      state.modal = null; state.editDraft = null; toast(t('saved')); render(); break;
+      state.editDraft = null; state.focus = null; state.errors = {}; state.view = 'crew';
+      toast(t('saved')); render(); break;
     }
     case 'delete':
       if (state.armedDelete !== id) { state.armedDelete = id; render(); setTimeout(() => { if (state.armedDelete === id) { state.armedDelete = null; render(); } }, 4000); break; }
       sess.deleted = true; state.armedDelete = null;
       await saveSession(sess); state.meta.unbacked += 1; await saveMeta();
+      state.editDraft = null; state.focus = null; state.view = 'crew';
       toast(t('deleted')); render(); break;
-    case 'set-pin': {
-      const v = document.getElementById('new-pin').value.trim();
-      if (!/^\d{4}$/.test(v)) { toast(t('pinBad')); break; }
-      state.meta.pin = v; await saveMeta(); toast(t('pinChanged')); render(); break;
-    }
     case 'go-send': state.view = 'send'; render(); window.scrollTo(0, 0); break;
     case 'back-crew': state.view = 'crew'; render(); window.scrollTo(0, 0); break;
     case 'send-filter': state.sendFilter = el.dataset.v; render(); break;
@@ -1041,8 +1069,8 @@ async function onAction(act, el) {
       await saveSession(sess); if (sess.sentAt) toast(t('markedSent')); render(); break;
     case 'export-csv': {
       const rows = live().filter((s) => s.recordingNumber).map((s) => Object.assign({}, s, { message: fillTemplate(tplBody(), s) }));
-      const head = 'emails,names,podcast_name,code,recording_number,link,subject,message';
-      const body = rows.map((s) => [s.guests.map((g) => g.email).join(', '), s.guests.map((g) => g.name).join(', '), s.podcastName, s.code, s.recordingNumber, s.link || '', fillTemplate(tplSubject(), s), s.message].map(csvCell).join(','));
+      const head = 'emails,names,podcast_name,recording_number,link,subject,message';
+      const body = rows.map((s) => [s.guests.map((g) => g.email).join(', '), s.guests.map((g) => g.name).join(', '), s.podcastName, s.recordingNumber, s.link || '', fillTemplate(tplSubject(), s), s.message].map(csvCell).join(','));
       await shareOrDownload([new File(['﻿' + [head].concat(body).join('\n')], 'medabrim-fm-mail-merge.csv', { type: 'text/csv' })]);
       break;
     }
@@ -1121,7 +1149,7 @@ $app.addEventListener('change', async (e) => {
     const v = el.value.trim();
     if (s && v !== (s.recordingNumber || '')) {
       s.recordingNumber = v; await saveSession(s); state.meta.unbacked += 1; await saveMeta();
-      toast(t('saved') + ': ' + s.code + ' → ' + (v || '—'));
+      toast(t('saved'));
       const y = window.scrollY; render(); window.scrollTo(0, y);
     }
   } else if (el.dataset.link) {
@@ -1136,7 +1164,7 @@ $app.addEventListener('change', async (e) => {
 });
 
 document.addEventListener('keydown', (e) => {
-  if (!state.focus || state.modal || !['form', 'rec'].includes(state.view) || e.metaKey || e.ctrlKey) return;
+  if (!state.focus || state.modal || !['form', 'rec', 'edit'].includes(state.view) || e.metaKey || e.ctrlKey) return;
   const { f, i } = state.focus;
   if (e.key === 'Enter' || e.key === 'Tab') { e.preventDefault(); nextField(); }
   else if (e.key === 'Backspace') { e.preventDefault(); setVal(f, i, getVal(f, i).slice(0, -1)); }
