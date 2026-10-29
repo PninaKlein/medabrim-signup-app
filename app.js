@@ -6,7 +6,7 @@ const TEXT = {
   en: {
     camp: 'Medabrim FM', onAir: 'On air', who: 'Who is recording today?',
     recordings: 'Recordings so far', signedUp: '{n} signed up', lastBackupL: 'Last backup',
-    unbackedN: '{n} changes not backed up yet', allBacked: 'Everything is backed up',
+    unbackedN: '{n} changes not backed up yet', unbacked1: '1 change not backed up yet', allBacked: 'Everything is backed up',
     missingBanner: '{n} entries have no recording number', missingBanner1: '1 entry has no recording number', showMissing: 'Show them', showAll: 'Show all',
     noneMissing: 'Every entry has a recording number.', allEntries: 'All entries', tapToEdit: 'Tap an entry to add the number or fix details',
     addNum: '+ Add #', editTitle: 'Edit entry', deleteEntry: 'Delete this entry', more: 'More',
@@ -81,7 +81,7 @@ const TEXT = {
   he: {
     camp: 'מדברים FM', onAir: 'בשידור', who: 'מי מקליטים היום?',
     recordings: 'הקלטות עד עכשיו', signedUp: '{n} נרשמו', lastBackupL: 'גיבוי אחרון',
-    unbackedN: '{n} שינויים עוד לא מגובים', allBacked: 'הכול מגובה',
+    unbackedN: '{n} שינויים עוד לא מגובים', unbacked1: 'שינוי אחד עוד לא מגובה', allBacked: 'הכול מגובה',
     missingBanner: 'ל־{n} רשומות חסר מספר הקלטה', missingBanner1: 'לרשומה אחת חסר מספר הקלטה', showMissing: 'להציג אותן', showAll: 'להציג הכול',
     noneMissing: 'לכל הרשומות יש מספר הקלטה.', allEntries: 'כל הרשומות', tapToEdit: 'הקישו על רשומה כדי להוסיף מספר או לתקן פרטים',
     addNum: '+ מספר', editTitle: 'עריכת רשומה', deleteEntry: 'מחיקת הרשומה', more: 'עוד',
@@ -567,7 +567,7 @@ function viewConfirm() {
   return scene(`
     <h1>${esc(t('confirmTitle'))}</h1>
     <p class="sub">${esc(t('confirmLede'))}</p>
-    <div class="confirm-list">
+    <div class="confirm-list ${d.guests.length > 3 ? 'compact' : ''}">
       ${d.guests.map((g, i) => `<div class="confirm-item">
         <div class="ci-text"><div class="who">${esc(g.name.trim())}</div><div class="mail">${esc(cleanEmail(g.email))}</div></div>
         <button type="button" class="btn sm fix" data-act="fix" data-k="name" data-i="${i}">${esc(t('editItem'))}</button>
@@ -665,7 +665,7 @@ function viewCrew() {
       <div class="backupcard ${due ? 'due' : ''}">
         <div class="lbl">${esc(t('lastBackupL'))}</div>
         <div class="big2">${esc(relTime(state.meta.lastBackupAt))}</div>
-        <div class="sub2">${esc(state.meta.unbacked ? t('unbackedN', { n: state.meta.unbacked }) : t('allBacked'))}</div>
+        <div class="sub2">${esc(state.meta.unbacked === 1 ? t('unbacked1') : state.meta.unbacked ? t('unbackedN', { n: state.meta.unbacked }) : t('allBacked'))}</div>
         <button class="btn ${due ? 'primary' : 'dark'} bk" data-act="backup">${esc(t('backupNow'))}</button>
       </div>
     </section>
@@ -1103,6 +1103,8 @@ setInterval(() => {
   const started = state.draft.guests.some((g) => g.name || g.email) || state.draft.podcastName;
   const away = Date.now() - state.lastTouch > 3 * 60 * 1000;
   if (away && started && !state.modal && (state.view === 'form' || state.view === 'confirm')) resetGuest();
+  // The entry is already saved on the crew screen; its number can be added later from the crew list.
+  if (state.view === 'rec' && Date.now() - state.lastTouch > 5 * 60 * 1000) resetGuest();
 }, 15000);
 
 $app.addEventListener('click', (e) => {

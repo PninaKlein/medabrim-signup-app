@@ -1,5 +1,5 @@
 // Offline cache for the sign-up app. Bump VERSION whenever any file changes.
-const VERSION = 'medabrim-v5';
+const VERSION = 'medabrim-v6';
 const FILES = [
   './',
   './index.html',

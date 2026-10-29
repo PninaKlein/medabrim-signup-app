@@ -368,3 +368,8 @@ body.day:has(.edit-stage) { padding: 0; height: 100%; overflow: hidden; }
 .edit-body .del { align-self: flex-start; margin-top: 8px; }
 .edit-body .btn.ghost { align-self: flex-start; }
 .x { width: 46px; height: 46px; border-radius: 50%; border: 0; font-size: 26px; line-height: 1; cursor: pointer; }
+.confirm-list.compact { gap: 8px; }
+.confirm-list.compact .confirm-item { padding: 10px 18px; }
+.confirm-list.compact .who { font-size: 16px; }
+.confirm-list.compact .mail { font-size: 24px; }
+.confirm-list.compact .btn.fix { min-height: 44px; }
